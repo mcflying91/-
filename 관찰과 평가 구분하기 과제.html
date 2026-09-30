@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관찰 vs 평가 구분하기 학습 퀴즈</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Noto Sans KR & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Noto Sans KR', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            },
+            obs: {
+              light: '#eff6ff',
+              border: '#3b82f6',
+              text: '#1d4ed8'
+            },
+            eval: {
+              light: '#fef2f2',
+              border: '#ef4444',
+              text: '#b91c1c'
+            },
+            mix: {
+              light: '#fefce8',
+              border: '#eab308',
+              text: '#a16207'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #f8fafc;
+      font-family: 'Noto Sans KR', sans-serif;
+      word-break: keep-all;
+    }
+    
+    /* Custom radio styling & transition effects */
+    .option-card {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .option-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .option-card input[type="radio"]:checked + div {
+      border-color: #4f46e5;
+      background-color: #eef2ff;
+      color: #3730a3;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.12);
+    }
+
+    .option-card input[type="radio"]:checked + div .radio-icon {
+      border-color: #4f46e5;
+      background-color: #4f46e5;
+    }
+
+    .option-card input[type="radio"]:checked + div .radio-icon::after {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .card-correct {
+      border-color: #22c55e !important;
+      background-color: #f0fdf4 !important;
+    }
+
+    .card-incorrect {
+      border-color: #ef4444 !important;
+      background-color: #fef2f2 !important;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col justify-between">
+
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-4xl mx-auto px-4 py-3 sm:px-6 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-500/30">
+          <i class="fa-solid fa-brain text-xl"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg sm:text-xl text-slate-900 leading-tight">비폭력대화: 관찰 vs 평가</h1>
+          <p class="text-xs text-slate-500 hidden sm:block">비폭력 대화(NVC)의 첫 단계, 사실과 주관 구분하기</p>
+        </div>
+      </div>
+      <div id="progress-badge" class="bg-slate-100 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold text-slate-700 flex items-center space-x-1.5 border border-slate-200">
+        <i class="fa-regular fa-pen-to-square text-brand-600"></i>
+        <span>응답: <strong id="answered-count" class="text-brand-600">0</strong> / 20</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-6 sm:px-6 flex-grow w-full">
+    
+    <section class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200 mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+          <i class="fa-solid fa-book-open text-brand-600"></i>
+          개념 정리 가이드
+        </h2>
+        <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md font-medium">학습 포인트</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- 관찰 -->
+        <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-bold text-blue-900 text-sm sm:text-base flex items-center gap-1.5">
+                <i class="fa-solid fa-eye text-blue-600"></i> ① 관찰 (사실)
+              </span>
+              <span class="text-[11px] font-semibold bg-blue-100 text-blue-800 px-2 py-0.5 rounded">객관적</span>
+            </div>
+            <p class="text-xs sm:text-sm text-blue-950 leading-relaxed mb-3">
+              있는 그대로 보고 듣는 것. 비디오 카메라나 녹음기로 찍듯이 객관적으로 서술.
+            </p>
+          </div>
+          <div class="bg-white/80 rounded-lg p-2.5 text-[12px] text-blue-900 border border-blue-100 font-medium">
+            💡 특성: 중립적, 객관적, 개별화, 누구나 동일하게 인정
+          </div>
+        </div>
+
+        <!-- 평가 -->
+        <div class="bg-red-50/70 border border-red-200 rounded-xl p-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-bold text-red-900 text-sm sm:text-base flex items-center gap-1.5">
+                <i class="fa-solid fa-comment-slash text-red-600"></i> ② 평가 (의견)
+              </span>
+              <span class="text-[11px] font-semibold bg-red-100 text-red-800 px-2 py-0.5 rounded">주관적</span>
+            </div>
+            <p class="text-xs sm:text-sm text-red-950 leading-relaxed mb-3">
+              현상에 대한 주관적 해석, 진단, 분석, 비난, 일반화 또는 라벨링.
+            </p>
+          </div>
+          <div class="bg-white/80 rounded-lg p-2.5 text-[12px] text-red-900 border border-red-100 font-medium">
+            💡 특성: 편파적, 주관적, 일반화, 보는 이에 따라 다름
+          </div>
+        </div>
+
+        <!-- 관찰+평가 -->
+        <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-bold text-amber-900 text-sm sm:text-base flex items-center gap-1.5">
+                <i class="fa-solid fa-scale-balanced text-amber-600"></i> ③ 관찰 + 평가
+              </span>
+              <span class="text-[11px] font-semibold bg-amber-100 text-amber-800 px-2 py-0.5 rounded">혼합형</span>
+            </div>
+            <p class="text-xs sm:text-sm text-amber-950 leading-relaxed mb-3">
+              객관적 사실(관찰)과 주관적 해석(평가)이 한 문장 안에 함께 결합된 형태.
+            </p>
+          </div>
+          <div class="bg-white/80 rounded-lg p-2.5 text-[12px] text-amber-900 border border-amber-100 font-medium">
+            💡 주의: 사실을 말하는 듯하나 평가가 섞여 비난으로 전달됨
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="result-dashboard" class="hidden mb-8 bg-white rounded-2xl p-6 shadow-md border border-slate-200">
+      <div class="text-center pb-6 border-b border-slate-100">
+        <div id="score-icon-container" class="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl mb-3">
+          <!-- Icon dynamically updated -->
+        </div>
+        <h2 class="text-2xl font-bold text-slate-900 mb-1" id="score-title">퀴즈 완료!</h2>
+        <p class="text-sm text-slate-600 mb-4" id="score-subtitle">아래에서 각 문제별 상세 해설을 확인해 보세요.</p>
+
+        <div class="inline-flex items-center justify-center px-6 py-3 bg-slate-50 rounded-2xl border border-slate-200 gap-4">
+          <div class="text-center">
+            <span class="block text-xs text-slate-500 font-medium">맞힌 문제</span>
+            <span id="correct-count-text" class="text-2xl font-extrabold text-emerald-600">0</span>
+            <span class="text-xs text-slate-400">/ 20</span>
+          </div>
+          <div class="h-8 w-[1px] bg-slate-200"></div>
+          <div class="text-center">
+            <span class="block text-xs text-slate-500 font-medium">성취 점수</span>
+            <span id="score-percentage-text" class="text-2xl font-extrabold text-brand-600">0점</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter options after submit -->
+      <div class="pt-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
+          <button type="button" onclick="filterQuestions('all')" id="filter-all" class="px-3 py-1.5 rounded-lg bg-white text-slate-800 shadow-sm transition">전체 보기</button>
+          <button type="button" onclick="filterQuestions('wrong')" id="filter-wrong" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">틀린 문제만</button>
+          <button type="button" onclick="filterQuestions('correct')" id="filter-correct" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">정답만 보기</button>
+        </div>
+        <button type="button" onclick="resetQuiz()" class="text-xs sm:text-sm font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-brand-50 transition">
+          <i class="fa-solid fa-rotate-right"></i> 다시 풀어보기
+        </button>
+      </div>
+    </section>
+
+    <form id="quiz-form" onsubmit="return false;">
+      <div id="questions-container" class="space-y-6">
+        <!-- 20 Question Cards dynamically generated by JavaScript -->
+      </div>
+
+      <div class="sticky bottom-4 z-20 mt-8">
+        <div class="bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-slate-200/80 flex items-center justify-between max-w-4xl mx-auto">
+          <div class="text-xs sm:text-sm font-medium text-slate-600">
+            <span class="hidden sm:inline">문항을 읽고 세 선택지 중 하나를 골라주세요.</span>
+            <span class="sm:hidden"><strong id="mobile-answered">0</strong>/20 완료</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <button type="button" id="reset-btn" onclick="resetQuiz()" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 border border-slate-200 transition">
+              초기화
+            </button>
+            <button type="button" id="submit-btn" onclick="submitQuiz()" class="px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-600 hover:bg-brand-700 active:scale-95 shadow-md shadow-brand-500/20 transition flex items-center gap-2">
+              <span>정답 제출하기</span>
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 mt-12">
+    <p class="font-medium">비폭력대화(NVC) 학습용 예문 구분 퀴즈</p>
+    <p class="mt-1 text-slate-400">관찰(사실)과 평가(의견)를 구별하는 능력을 기르면 더욱 평화롭고 명확한 소통이 가능해집니다.</p>
+  </footer>
+
+  <script>
+    /* Question Data Definition */
+    const questionsData = [
+      { id: 1, text: "상우는 약속 시간보다 20분 늦게 도착했다.", answer: "관찰", exp: "시계로 측정 가능한 객관적 사실입니다." },
+      { id: 2, text: "상우는 약속 개념이 전혀 없다.", answer: "평가", exp: "지각한 사실을 바탕으로 내린 주관적 판단입니다." },
+      { id: 3, text: "선희는 발표하는 동안 손을 떨었다.", answer: "관찰", exp: "시각적으로 보고 확인할 수 있는 신체적 동작입니다." },
+      { id: 4, text: "선희는 새가슴이라 발표를 못 한다.", answer: "평가", exp: "성격과 능력을 단정 짓는 주관적 의견입니다." },
+      { id: 5, text: "팀장님은 보고서를 읽은 뒤 한숨을 쉬셨다.", answer: "관찰", exp: "누구나 들을 수 있는 객관적인 행동 사실입니다." },
+      { id: 6, text: "팀장님은 내 보고서가 형편없다고 생각하신다.", answer: "평가", exp: "상대의 내면이나 의도를 추측해 내린 해석입니다." },
+      { id: 7, text: "진수는 이번 수학 시험에서 100점을 받았다.", answer: "관찰", exp: "성적표로 확인 가능한 객관적 데이터입니다." },
+      { id: 8, text: "진수는 수학 천재다.", answer: "평가", exp: "특정 결과를 바탕으로 인물에게 라벨을 붙인 평가입니다." },
+      { id: 9, text: "어머니는 어제 밤 11시에 집에 오셨다.", answer: "관찰", exp: "귀가 시간을 있는 그대로 나타낸 객관적 사실입니다." },
+      { id: 10, text: "어머니는 일중독자(워커홀릭)다.", answer: "평가", exp: "늦은 귀가라는 사실에 주관적 정의를 덧붙인 판단입니다." },
+      { id: 11, text: "지은이는 나와 눈이 마주치자 고개를 숙였다.", answer: "관찰", exp: "시각적으로 확인할 수 있는 구체적 행동입니다." },
+      { id: 12, text: "지은이는 나를 싫어해서 피하는 것이다.", answer: "평가", exp: "행동의 이유와 상대의 마음을 주관적으로 추측한 결론입니다." },
+      { id: 13, text: "민경이는 수업 시간 중 20분 동안 창밖을 바라보았다.", answer: "관찰", exp: "시간과 행동을 중립적으로 기록한 사실입니다." },
+      { id: 14, text: "민경이는 산만하고 수업태도가 나쁘다.", answer: "평가", exp: "특정 행동에 가치 판단과 해석을 더한 주관적 의견입니다." },
+      { id: 15, text: "형은 오늘 아침에 나에게 한 마디도 하지 않았다.", answer: "관찰", exp: "언어적 상호작용이 없었던 상황을 객관적으로 서술한 것입니다." },
+      { id: 16, text: "형은 나한테 꽁해서 삐쳐 있다.", answer: "평가", exp: "상대의 심리 상태를 규정한 내면의 해석입니다." },
+      { id: 17, text: "선생님은 내 발표가 끝난 뒤 아무런 질문을 하지 않으셨다.", answer: "관찰", exp: "현장에서 일어난 객관적 상황 그대로입니다." },
+      { id: 18, text: "선생님은 내 발표 내용이 마음에 들지 않으셨다.", answer: "평가", exp: "타인의 생각을 추측하여 내린 주관적 결론입니다." },
+      { id: 19, text: "동생은 어제 내가 사 온 과자를 다 먹어버렸고, 참 염치가 없다.", answer: "관찰+평가", exp: "'과자를 다 먹었다'는 관찰(사실)과 '참 염치가 없다'는 평가(의견)가 한 문장에 합성된 표현입니다." },
+      { id: 20, text: "지훈이는 이번 주에 3번이나 지각했으니, 성실하지 못한 학생이다.", answer: "관찰+평가", exp: "'3번 지각했다'는 객관적 관찰(사실)과 '성실하지 못한 학생이다'라는 주관적 평가(의견)가 섞여 있습니다." }
+    ];
+
+    let userAnswers = {};
+    let isSubmitted = false;
+
+    /* Render Quiz Questions */
+    function renderQuiz() {
+      const container = document.getElementById("questions-container");
+      container.innerHTML = questionsData.map((q, idx) => `
+        <div id="card-${q.id}" class="question-card bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200 transition-all duration-200 hover:border-slate-300">
+          <!-- Question Header -->
+          <div class="flex items-start justify-between gap-3 mb-4">
+            <div class="flex items-start gap-3">
+              <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs sm:text-sm flex items-center justify-center shrink-0 mt-0.5">
+                ${q.id}
+              </span>
+              <p class="font-bold text-base sm:text-lg text-slate-900 leading-snug">
+                "${q.text}"
+              </p>
+            </div>
+            <span id="badge-${q.id}" class="hidden shrink-0 text-xs font-bold px-2.5 py-1 rounded-full"></span>
+          </div>
+
+          <!-- Options Group -->
+          <div class="grid grid-cols-3 gap-2 sm:gap-3">
+            ${['관찰', '평가', '관찰+평가'].map((opt) => `
+              <label class="option-card cursor-pointer block select-none">
+                <input type="radio" name="q${q.id}" value="${opt}" class="hidden" onchange="handleSelect(${q.id}, '${opt}')">
+                <div class="border border-slate-200 rounded-xl p-3 sm:p-3.5 flex items-center justify-center gap-2 text-xs sm:text-sm font-medium text-slate-600 bg-slate-50/50 hover:bg-slate-100/80 transition">
+                  <span class="radio-icon w-4 h-4 rounded-full border border-slate-300 flex items-center justify-center shrink-0"></span>
+                  <span>${opt}</span>
+                </div>
+              </label>
+            `).join('')}
+          </div>
+
+          <!-- Explanation Box (Shown after submit) -->
+          <div id="exp-${q.id}" class="hidden mt-4 p-4 rounded-xl text-xs sm:text-sm leading-relaxed border"></div>
+        </div>
+      `).join('');
+
+      updateProgress();
+    }
+
+    /* Option Selection Handler */
+    function handleSelect(questionId, value) {
+      if (isSubmitted) return; // Lock if submitted
+      userAnswers[questionId] = value;
+      updateProgress();
+    }
+
+    /* Update Progress Counters */
+    function updateProgress() {
+      const count = Object.keys(userAnswers).length;
+      document.getElementById('answered-count').innerText = count;
+      document.getElementById('mobile-answered').innerText = count;
+    }
+
+    /* Submit Quiz Logic */
+    function submitQuiz() {
+      const totalCount = questionsData.length;
+      const answeredCount = Object.keys(userAnswers).length;
+
+      // Check unanswered questions
+      if (answeredCount < totalCount) {
+        const firstUnanswered = questionsData.find(q => !userAnswers[q.id]);
+        if (firstUnanswered) {
+          const cardEl = document.getElementById(`card-${firstUnanswered.id}`);
+          cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          
+          // Flash effect
+          cardEl.classList.add('ring-2', 'ring-amber-400');
+          setTimeout(() => cardEl.classList.remove('ring-2', 'ring-amber-400'), 2000);
+        }
+        
+        const confirmSubmit = confirm(`아직 답하지 않은 문제가 ${totalCount - answeredCount}개 있습니다.\n이대로 제출하시겠습니까?`);
+        if (!confirmSubmit) return;
+      }
+
+      isSubmitted = true;
+      let score = 0;
+
+      questionsData.forEach((q) => {
+        const userVal = userAnswers[q.id];
+        const card = document.getElementById(`card-${q.id}`);
+        const expBox = document.getElementById(`exp-${q.id}`);
+        const badge = document.getElementById(`badge-${q.id}`);
+        const inputs = document.querySelectorAll(`input[name="q${q.id}"]`);
+
+        // Disable input buttons
+        inputs.forEach(i => i.disabled = true);
+
+        // Display results
+        expBox.classList.remove('hidden');
+        badge.classList.remove('hidden');
+
+        if (userVal === q.answer) {
+          score++;
+          card.className = "question-card bg-white rounded-2xl p-5 sm:p-6 shadow-sm border-2 card-correct";
+          badge.className = "shrink-0 text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300";
+          badge.innerHTML = '<i class="fa-solid fa-check mr-1"></i>정답';
+
+          expBox.className = "mt-4 p-4 rounded-xl text-xs sm:text-sm leading-relaxed bg-emerald-100/60 border-emerald-200 text-emerald-950";
+          expBox.innerHTML = `<div class="font-bold text-emerald-800 mb-1"><i class="fa-solid fa-circle-check mr-1"></i>정답입니다! (선택: ${userVal})</div>${q.exp}`;
+        } else {
+          card.className = "question-card bg-white rounded-2xl p-5 sm:p-6 shadow-sm border-2 card-incorrect";
+          badge.className = "shrink-0 text-xs font-bold px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 border border-rose-300";
+          badge.innerHTML = '<i class="fa-solid fa-xmark mr-1"></i>오답';
+
+          const choiceText = userVal ? userVal : '미선택';
+          expBox.className = "mt-4 p-4 rounded-xl text-xs sm:text-sm leading-relaxed bg-rose-100/60 border-rose-200 text-rose-950";
+          expBox.innerHTML = `
+            <div class="font-bold text-rose-800 mb-1">
+              <i class="fa-solid fa-circle-xmark mr-1"></i>오답입니다. 
+              <span class="font-normal text-rose-700">(제출: ${choiceText} / 정답: <strong class="underline decoration-2">${q.answer}</strong>)</span>
+            </div>
+            ${q.exp}
+          `;
+        }
+      });
+
+      // Update Dashboard
+      const dashboard = document.getElementById('result-dashboard');
+      const scoreIconContainer = document.getElementById('score-icon-container');
+      const scoreTitle = document.getElementById('score-title');
+      const scoreSubtitle = document.getElementById('score-subtitle');
+      const correctText = document.getElementById('correct-count-text');
+      const scorePercentageText = document.getElementById('score-percentage-text');
+
+      const percentage = Math.round((score / totalCount) * 100);
+      correctText.innerText = score;
+      scorePercentageText.innerText = `${percentage}점`;
+
+      if (percentage === 100) {
+        scoreIconContainer.className = "w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl mb-3 bg-emerald-100 text-emerald-600";
+        scoreIconContainer.innerHTML = '<i class="fa-solid fa-award"></i>';
+        scoreTitle.innerText = "만점입니다! 완벽해요 🎉";
+        scoreSubtitle.innerText = "관찰과 평가를 명확하게 다룰 수 있는 뛰어난 문해력을 가지셨습니다.";
+      } else if (percentage >= 70) {
+        scoreIconContainer.className = "w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl mb-3 bg-brand-100 text-brand-600";
+        scoreIconContainer.innerHTML = '<i class="fa-solid fa-thumbs-up"></i>';
+        scoreTitle.innerText = "참 잘하셨습니다! 👍";
+        scoreSubtitle.innerText = "대부분의 문제에서 관찰과 평가의 구분을 잘 파악하셨습니다.";
+      } else {
+        scoreIconContainer.className = "w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl mb-3 bg-amber-100 text-amber-600";
+        scoreIconContainer.innerHTML = '<i class="fa-solid fa-book-reader"></i>';
+        scoreTitle.innerText = "복습해 볼까요? 💡";
+        scoreSubtitle.innerText = "아래 해설을 읽어보며 평가가 섞인 표현을 다시 체크해 보세요.";
+      }
+
+      dashboard.classList.remove('hidden');
+      dashboard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Change Submit button state
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.innerHTML = '<span>제출 완료</span> <i class="fa-solid fa-check"></i>';
+      submitBtn.classList.replace('bg-brand-600', 'bg-slate-400');
+      submitBtn.classList.remove('hover:bg-brand-700');
+      submitBtn.disabled = true;
+    }
+
+    /* Filter Question Cards */
+    function filterQuestions(type) {
+      const btnAll = document.getElementById('filter-all');
+      const btnWrong = document.getElementById('filter-wrong');
+      const btnCorrect = document.getElementById('filter-correct');
+
+      [btnAll, btnWrong, btnCorrect].forEach(btn => {
+        btn.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition";
+      });
+
+      if (type === 'all') {
+        btnAll.className = "px-3 py-1.5 rounded-lg bg-white text-slate-800 shadow-sm font-bold transition";
+      } else if (type === 'wrong') {
+        btnWrong.className = "px-3 py-1.5 rounded-lg bg-white text-slate-800 shadow-sm font-bold transition";
+      } else if (type === 'correct') {
+        btnCorrect.className = "px-3 py-1.5 rounded-lg bg-white text-slate-800 shadow-sm font-bold transition";
+      }
+
+      questionsData.forEach(q => {
+        const card = document.getElementById(`card-${q.id}`);
+        const isCorrect = userAnswers[q.id] === q.answer;
+
+        if (type === 'all') {
+          card.classList.remove('hidden');
+        } else if (type === 'wrong') {
+          if (isCorrect) card.classList.add('hidden');
+          else card.classList.remove('hidden');
+        } else if (type === 'correct') {
+          if (isCorrect) card.classList.remove('hidden');
+          else card.classList.add('hidden');
+        }
+      });
+    }
+
+    /* Reset Quiz State */
+    function resetQuiz() {
+      if (Object.keys(userAnswers).length > 0 && !isSubmitted) {
+        if (!confirm("풀던 중인 내용이 초기화됩니다. 계속하시겠습니까?")) return;
+      }
+
+      userAnswers = {};
+      isSubmitted = false;
+
+      // Uncheck all radio inputs
+      const radios = document.querySelectorAll('input[type="radio"]');
+      radios.forEach(r => {
+        r.checked = false;
+        r.disabled = false;
+      });
+
+      // Reset card styling
+      questionsData.forEach(q => {
+        const card = document.getElementById(`card-${q.id}`);
+        const expBox = document.getElementById(`exp-${q.id}`);
+        const badge = document.getElementById(`badge-${q.id}`);
+
+        card.className = "question-card bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200 transition-all duration-200 hover:border-slate-300";
+        card.classList.remove('hidden');
+        expBox.classList.add('hidden');
+        badge.classList.add('hidden');
+      });
+
+      // Reset dashboard
+      document.getElementById('result-dashboard').classList.add('hidden');
+
+      // Reset Submit button
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.innerHTML = '<span>정답 제출하기</span> <i class="fa-solid fa-paper-plane"></i>';
+      submitBtn.className = "px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-600 hover:bg-brand-700 active:scale-95 shadow-md shadow-brand-500/20 transition flex items-center gap-2";
+      submitBtn.disabled = false;
+
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* Initialize on window load */
+    window.onload = renderQuiz;
+  </script>
+</body>
+</html>
